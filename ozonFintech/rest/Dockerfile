@@ -1,9 +1,9 @@
 FROM golang:alpine
 
+RUN go mod download
+
 COPY . .
 WORKDIR ./app/
-
-RUN go mod donwload
 
 RUN go build app.go
 

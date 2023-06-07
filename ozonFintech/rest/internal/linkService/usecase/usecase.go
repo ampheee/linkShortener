@@ -7,6 +7,7 @@ import (
 	"ozonFintech/internal/linkService"
 	"ozonFintech/internal/linkService/repository/postgreRepo"
 	RedisRepo "ozonFintech/internal/linkService/repository/redisRepo"
+	"ozonFintech/internal/utilities"
 	"ozonFintech/pkg/logger"
 	"ozonFintech/pkg/postgresql"
 )
@@ -16,12 +17,27 @@ type LinkUseCase struct {
 	Repo   linkService.Repo
 }
 
-func (l LinkUseCase) GetAbbreviatedLink(ctx context.Context, link string) (linkService.LinkDTO, error) {
-	panic("Implement me!")
+func (l LinkUseCase) GetOriginalByAbbreviated(ctx context.Context, link string) (string, error) {
+	originalLink, err := l.Repo.SelectLink(ctx, link)
+	if err != nil {
+		l.Logger.Warn().Err(err).Msg("unable to get link by abbreviated.")
+		return "", err
+	}
+	if originalLink == "" {
+		l.Logger.Warn().Msg("no originalLink by abbreviated.")
+	}
+	return originalLink, nil
 }
 
-func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (linkService.LinkDTO, error) {
-	panic("Implement me!")
+func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (string, error) {
+	abbreviatedLink, err := utilities.Encrypt(link)
+	if err != nil {
+		return "", err
+	}
+	if l.Repo.InsertLink(ctx, abbreviatedLink, link) != nil {
+		return "", err
+	}
+	return abbreviatedLink, nil
 }
 
 func NewLinkService(ctx context.Context, c config.Config) linkService.Link {

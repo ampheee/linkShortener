@@ -1,0 +1,6 @@
+version: "3"
+services:
+  linkService:
+    image:
+  database:
+    image: postgres
