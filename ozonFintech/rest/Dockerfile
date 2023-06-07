@@ -1,10 +1,11 @@
 FROM golang:alpine
 
-RUN go mod download
-
+WORKDIR ./rest
 COPY . .
-WORKDIR ./app/
-
+RUN go mod download
+WORKDIR ./app
 RUN go build app.go
+
+EXPOSE 8080
 
 CMD ["./app", "-migration=OnStart"]

@@ -1,6 +1,20 @@
 version: "3"
 services:
-  linkService:
-    image:
-  database:
+  app:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - CONFIG_FILE=config.yaml
+    volumes:
+      - ./config/config.yaml:/../config/config.yaml
+    ports:
+      - "8080:8080"
+  postgres:
     image: postgres
+  redis:
+    image: redis
+

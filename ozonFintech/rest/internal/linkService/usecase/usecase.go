@@ -10,6 +10,7 @@ import (
 	"ozonFintech/internal/utilities"
 	"ozonFintech/pkg/logger"
 	"ozonFintech/pkg/postgresql"
+	"ozonFintech/pkg/redis"
 )
 
 type LinkUseCase struct {
@@ -25,6 +26,7 @@ func (l LinkUseCase) GetOriginalByAbbreviated(ctx context.Context, link string) 
 	}
 	if originalLink == "" {
 		l.Logger.Warn().Msg("no originalLink by abbreviated.")
+		return "", nil
 	}
 	return originalLink, nil
 }
@@ -40,18 +42,28 @@ func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (string,
 	return abbreviatedLink, nil
 }
 
-func NewLinkService(ctx context.Context, c config.Config) linkService.Link {
+func NewLinkService(ctx context.Context, c config.Config) (linkService.Link, error) {
+	logg := logger.GetLogger()
 	var repo linkService.Repo
 	switch c.StorageType {
 	case "In-memory_Redis":
-		repo = RedisRepo.NewRedisRep()
+		client, err := redis.GetClient(ctx, c)
+		if err != nil {
+			logg.Warn().Err(err).Msg("unable to get redis client while call newLinkService.")
+			return nil, err
+		}
+		repo = RedisRepo.NewRedisRep(client)
 	case "PostgreSQL":
-		pool := postgresql.GetPool(ctx, c)
+		pool, err := postgresql.GetPool(ctx, c)
+		if err != nil {
+			logg.Warn().Err(err).Msg("unable to get postgresql pool while call newLinkService.")
+			return nil, err
+		}
 		postgresql.InitMigration(c)
 		repo = postgreRepo.NewPostgreRep(pool)
 	}
 	return &LinkUseCase{
 		Logger: logger.GetLogger(),
 		Repo:   repo,
-	}
+	}, nil
 }

@@ -13,12 +13,11 @@ import (
 	"time"
 )
 
-func GetPool(ctx context.Context, c config.Config) (connect *pgxpool.Pool) {
+func GetPool(ctx context.Context, c config.Config) (connect *pgxpool.Pool, err error) {
 	log := logger.GetLogger()
-	err := utilities.ConnectWithTries(func() error {
+	err = utilities.ConnectWithTries(func() error {
 		ctx, cancel := context.WithCancel(ctx)
 		defer cancel()
-		var err error
 		connect, err = pgxpool.New(ctx, fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
 			c.PostgreSQLDB.User,
 			c.PostgreSQLDB.Pass,
@@ -30,9 +29,10 @@ func GetPool(ctx context.Context, c config.Config) (connect *pgxpool.Pool) {
 	}, 3, time.Second*3)
 	if err != nil || connect.Ping(ctx) != nil {
 		log.Fatal().Err(err).Msg("unable to connect to database")
+		return nil, err
 	}
 	log.Info().Msg("connected to database successfully")
-	return connect
+	return connect, nil
 }
 
 func MigratesUp(c config.Config) {

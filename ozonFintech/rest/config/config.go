@@ -16,7 +16,9 @@ type Config struct {
 		MaxConns string
 	}
 	RedisDB struct {
-		Addr string
+		Addr  string
+		Pass  string
+		DBNum int
 	}
 	StorageType string
 	Migration   string

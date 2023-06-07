@@ -20,6 +20,9 @@ func main() {
 	ctx := context.Background()
 	c := config.ParseConfig(config.LoadConfig())
 	utilities.ParseFlags(storageType, migration, &c)
-	Client := client.NewClient(ctx, c)
+	Client, err := client.NewClient(ctx, c)
+	if err != nil {
+		log.Fatal().Err(err).Msg("unable to init new client.")
+	}
 	log.Fatal().Err(Client.App.Listen(":8080")).Msg("Unable")
 }
