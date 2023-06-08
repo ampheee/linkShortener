@@ -1,0 +1,12 @@
+PostgreSQLDB:
+  User:
+  Pass:
+  Host:
+  Port:
+  Dbname:
+  SSLMode:
+  MaxConns:
+RedisDB:
+  Addr:
+  Pass:
+  DBNum:

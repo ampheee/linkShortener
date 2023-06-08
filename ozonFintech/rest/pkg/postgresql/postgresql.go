@@ -8,8 +8,8 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"ozonFintech/config"
-	"ozonFintech/internal/utilities"
 	"ozonFintech/pkg/logger"
+	"ozonFintech/pkg/utilities"
 	"time"
 )
 
@@ -90,7 +90,7 @@ func MigratesOnStart(c config.Config) {
 	if err = m.Migrate(1); err != nil && err != migrate.ErrNoChange {
 		log.Warn().Err(err).Msg("Unable to rollback migrations.")
 	} else {
-		log.Info().Msg("Migration down successfully!")
+		log.Info().Msg("Migration to start successfully!")
 	}
 }
 

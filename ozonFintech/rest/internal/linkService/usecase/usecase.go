@@ -2,15 +2,17 @@ package usecase
 
 import (
 	"context"
+	"errors"
 	"github.com/rs/zerolog"
+	"math"
 	"ozonFintech/config"
 	"ozonFintech/internal/linkService"
 	"ozonFintech/internal/linkService/repository/postgreRepo"
 	RedisRepo "ozonFintech/internal/linkService/repository/redisRepo"
-	"ozonFintech/internal/utilities"
 	"ozonFintech/pkg/logger"
 	"ozonFintech/pkg/postgresql"
 	"ozonFintech/pkg/redis"
+	"ozonFintech/pkg/utilities"
 )
 
 type LinkUseCase struct {
@@ -24,19 +26,16 @@ func (l LinkUseCase) GetOriginalByAbbreviated(ctx context.Context, link string) 
 		l.Logger.Warn().Err(err).Msg("unable to get link by abbreviated.")
 		return "", err
 	}
-	if originalLink == "" {
-		l.Logger.Warn().Msg("no originalLink by abbreviated.")
-		return "", nil
-	}
 	return originalLink, nil
 }
 
 func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (string, error) {
-	abbreviatedLink, err := utilities.Encrypt(link)
-	if err != nil {
-		return "", err
+	if link == "" {
+		return "", errors.New("EmptyLink")
 	}
-	if l.Repo.InsertLink(ctx, abbreviatedLink, link) != nil {
+	abbreviatedLink := utilities.EncodeBase63(int64(math.Abs(float64(utilities.HashLink(link)))))
+	l.Logger.Info().Msg(abbreviatedLink)
+	if err := l.Repo.InsertLink(ctx, abbreviatedLink, link); err != nil {
 		return "", err
 	}
 	l.Logger.Info().Msg("link saved and abbreviated returned.")

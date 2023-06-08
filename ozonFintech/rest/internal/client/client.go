@@ -7,6 +7,7 @@ import (
 	"ozonFintech/config"
 	"ozonFintech/internal/linkService"
 	"ozonFintech/internal/linkService/usecase"
+	"ozonFintech/pkg/logger"
 )
 
 type AppContext struct {
@@ -17,15 +18,25 @@ type AppContext struct {
 
 func (aCtx *AppContext) CtrlGetLink(c *fiber.Ctx) error {
 	aCtx.logger.Info().Msg("got " + c.Params("*") + "endpoint")
-	return c.SendString(c.Params("*"))
+	str, err := aCtx.LinkS.GetOriginalByAbbreviated(c.UserContext(), c.Params("*"))
+	if err != nil {
+		if err.Error() == "redis: nil" || err.Error() == "no rows in result set" {
+			return c.Status(404).SendString("Link not found")
+		} else {
+			return c.Status(500).SendString("InternalServiceError")
+		}
+	}
+	aCtx.logger.Info().Msg("endpoint processed.")
+	return c.Status(200).SendString(str)
 }
 func (aCtx *AppContext) CtrlPostLink(c *fiber.Ctx) error {
-	aCtx.logger.Info().Msg("got " + c.Params("*") + "endpoint")
+	aCtx.logger.Info().Msg("got " + "rus.tam" + c.Params("*") + " endpoint")
 	link, err := aCtx.LinkS.SaveOriginalLink(c.UserContext(), c.Params("*"))
 	if err != nil {
 		return c.Status(500).SendString("InternalServiceError")
 	}
-	return c.SendString(link)
+	aCtx.logger.Info().Msg("endpoint processed.")
+	return c.SendString("rus.tam/" + link)
 }
 
 func InitControllers(aCtx *AppContext) {
@@ -39,8 +50,9 @@ func NewClient(ctx context.Context, c config.Config) (*AppContext, error) {
 		return nil, err
 	}
 	aCtx := &AppContext{
-		App:   fiber.New(),
-		LinkS: lService,
+		App:    fiber.New(),
+		LinkS:  lService,
+		logger: logger.GetLogger(),
 	}
 	InitControllers(aCtx)
 	return aCtx, nil

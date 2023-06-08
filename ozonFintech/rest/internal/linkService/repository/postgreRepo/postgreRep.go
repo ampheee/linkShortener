@@ -38,6 +38,17 @@ func (p Postgres) InsertLink(ctx context.Context, abbreviatedLink, originalLink 
 		return err
 	}
 	defer conn.Release()
+	var exists bool
+	qExist := `select exists(select abbreviated from links where abbreviated = $1)`
+	err = conn.QueryRow(ctx, qExist, abbreviatedLink).Scan(&exists)
+	if err != nil {
+		p.logger.Warn().Err(err).Msg("unable to check link in table")
+		return err
+	}
+	if exists {
+		p.logger.Info().Msg("there is an exist link for this abbreviated.")
+		return nil
+	}
 	q := `insert into links values ($1, $2)`
 	_, err = conn.Exec(ctx, q, abbreviatedLink, originalLink)
 	if err != nil {

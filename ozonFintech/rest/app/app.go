@@ -5,8 +5,8 @@ import (
 	"flag"
 	"ozonFintech/config"
 	"ozonFintech/internal/client"
-	"ozonFintech/internal/utilities"
 	"ozonFintech/pkg/logger"
+	"ozonFintech/pkg/utilities"
 )
 
 var storageType = flag.String("storage", "PostgreSQL", "Enter an storage type: Redis or "+
