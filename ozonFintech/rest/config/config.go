@@ -61,7 +61,7 @@ func ParseConfigFromEnv() Config {
 			SSLMode string
 		}{
 			User:    os.Getenv("POSTGRES_USER"),
-			Pass:    os.Getenv("POSTGRES_PASS"),
+			Pass:    os.Getenv("POSTGRES_PASSWORD"),
 			Host:    os.Getenv("POSTGRES_HOST"),
 			Port:    os.Getenv("POSTGRES_PORT"),
 			Dbname:  os.Getenv("POSTGRES_DB_NAME"),
@@ -75,6 +75,8 @@ func ParseConfigFromEnv() Config {
 			Pass:  os.Getenv("REDIS_PASS"),
 			DBNum: os.Getenv("REDIS_DB_NUM"),
 		},
+		StorageType: os.Getenv("STORAGE"),
+		Migration:   os.Getenv("MIGRATION"),
 	}
 	log.Info().Msg("Config parsed successfully.")
 	return c

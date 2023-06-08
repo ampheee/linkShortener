@@ -18,8 +18,9 @@ func main() {
 	flag.Parse()
 	log := logger.GetLogger()
 	ctx := context.Background()
-	c := config.ParseConfigFromYaml(config.LoadConfigFromYaml())
-	utilities.ParseFlags(storageType, migration, &c)
+	//c := config.ParseConfigFromYaml(config.LoadConfigFromYaml())
+	c := config.ParseConfigFromEnv()
+	utilities.ParseFlagsFromCLI(storageType, migration, &c)
 	Client, err := client.NewClient(ctx, c)
 	if err != nil {
 		log.Fatal().Err(err).Msg("unable to init new client.")

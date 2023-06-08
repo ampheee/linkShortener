@@ -11,7 +11,7 @@ import (
 	RedisRepo "ozonFintech/internal/linkService/repository/redisRepo"
 	"ozonFintech/pkg/logger"
 	"ozonFintech/pkg/postgresql"
-	"ozonFintech/pkg/redis"
+	"ozonFintech/pkg/redisDB"
 	"ozonFintech/pkg/utilities"
 )
 
@@ -47,7 +47,7 @@ func NewLinkService(ctx context.Context, c config.Config) (linkService.Link, err
 	var repo linkService.Repo
 	switch c.StorageType {
 	case "Redis":
-		client, err := redis.GetClient(ctx, c)
+		client, err := redisDB.GetClient(ctx, c)
 		if err != nil {
 			logg.Warn().Err(err).Msg("unable to get redis client while call newLinkService.")
 			return nil, err

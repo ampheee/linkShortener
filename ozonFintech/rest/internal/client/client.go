@@ -17,7 +17,7 @@ type AppContext struct {
 }
 
 func (aCtx *AppContext) CtrlGetLink(c *fiber.Ctx) error {
-	aCtx.logger.Info().Msg("got " + c.Params("*") + "endpoint")
+	aCtx.logger.Info().Msg("got " + c.Params("*") + " endpoint")
 	str, err := aCtx.LinkS.GetOriginalByAbbreviated(c.UserContext(), c.Params("*"))
 	if err != nil {
 		if err.Error() == "redis: nil" || err.Error() == "no rows in result set" {

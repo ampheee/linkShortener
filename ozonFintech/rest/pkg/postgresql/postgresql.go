@@ -28,7 +28,13 @@ func GetPool(ctx context.Context, c config.Config) (connect *pgxpool.Pool, err e
 		return err
 	}, 3, time.Second*3)
 	if err != nil || connect.Ping(ctx) != nil {
-		log.Fatal().Err(err).Msg("unable to connect to database")
+		log.Fatal().Err(err).Msg("unable to connect to database. addr: " + fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=%s",
+			c.PostgreSQLDB.User,
+			c.PostgreSQLDB.Pass,
+			c.PostgreSQLDB.Host,
+			c.PostgreSQLDB.Port,
+			c.PostgreSQLDB.Dbname,
+			c.PostgreSQLDB.SSLMode))
 		return nil, err
 	}
 	log.Info().Msg("connected to database successfully")

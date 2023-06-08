@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 services:
   app:
     build:
@@ -7,14 +7,26 @@ services:
     depends_on:
       - postgres
       - redis
-    environment:
-      - CONFIG_FILE=config.yaml
-    volumes:
-      - ./config/config.yaml:/../config/config.yaml
     ports:
       - "8080:8080"
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+      POSTGRES_HOST:
+      POSTGRES_PORT:
+      POSTGRES_DB:
+      POSTGRES_SSL_MODE:
   postgres:
     image: postgres
+    environment:
+      POSTGRES_USER:
+      POSTGRES_PASSWORD:
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   redis:
     image: redis
+    environment:
+      REDIS_ADDR:
+      REDIS_PASS:
+      REDIS_DB_NUM: 
 
