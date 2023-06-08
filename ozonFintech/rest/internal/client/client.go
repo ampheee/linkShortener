@@ -21,11 +21,15 @@ func (aCtx *AppContext) CtrlGetLink(c *fiber.Ctx) error {
 }
 func (aCtx *AppContext) CtrlPostLink(c *fiber.Ctx) error {
 	aCtx.logger.Info().Msg("got " + c.Params("*") + "endpoint")
-	return c.SendString(c.Params("*"))
+	link, err := aCtx.LinkS.SaveOriginalLink(c.UserContext(), c.Params("*"))
+	if err != nil {
+		return c.Status(500).SendString("InternalServiceError")
+	}
+	return c.SendString(link)
 }
 
 func InitControllers(aCtx *AppContext) {
-	aCtx.App.Get("/*", aCtx.CtrlGetLink)
+	aCtx.App.Get("rus.tam/*", aCtx.CtrlGetLink)
 	aCtx.App.Post("/*", aCtx.CtrlPostLink)
 }
 

@@ -27,7 +27,7 @@ func (r Redis) SelectLink(ctx context.Context, abbreviatedLink string) (string, 
 }
 
 func (r Redis) InsertLink(ctx context.Context, abbreviatedLink, originalLink string) error {
-	err := r.Client.Set(ctx, abbreviatedLink, originalLink, 0).Err()
+	err := r.Client.Set(ctx, abbreviatedLink, "123check", 0).Err()
 	if err != nil {
 		r.logger.Warn().Msg("something went wrong while insert link into redis.")
 		return err

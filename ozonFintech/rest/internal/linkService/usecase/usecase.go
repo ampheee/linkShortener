@@ -39,6 +39,7 @@ func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (string,
 	if l.Repo.InsertLink(ctx, abbreviatedLink, link) != nil {
 		return "", err
 	}
+	l.Logger.Info().Msg("link saved and abbreviated returned.")
 	return abbreviatedLink, nil
 }
 
@@ -46,7 +47,7 @@ func NewLinkService(ctx context.Context, c config.Config) (linkService.Link, err
 	logg := logger.GetLogger()
 	var repo linkService.Repo
 	switch c.StorageType {
-	case "In-memory_Redis":
+	case "Redis":
 		client, err := redis.GetClient(ctx, c)
 		if err != nil {
 			logg.Warn().Err(err).Msg("unable to get redis client while call newLinkService.")

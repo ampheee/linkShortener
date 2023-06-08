@@ -9,7 +9,7 @@ import (
 	"ozonFintech/pkg/logger"
 )
 
-var storageType = flag.String("storage", "PostgreSQL", "Enter an storage type: In-memory_Redis or "+
+var storageType = flag.String("storage", "PostgreSQL", "Enter an storage type: Redis or "+
 	"PostgreSQL.")
 
 var migration = flag.String("migration", "", "Enter an migration step to do. Up/Down/OnStart(default)")
@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 	log := logger.GetLogger()
 	ctx := context.Background()
-	c := config.ParseConfig(config.LoadConfig())
+	c := config.ParseConfigFromYaml(config.LoadConfigFromYaml())
 	utilities.ParseFlags(storageType, migration, &c)
 	Client, err := client.NewClient(ctx, c)
 	if err != nil {
