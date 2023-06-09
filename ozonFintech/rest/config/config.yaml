@@ -1,0 +1,12 @@
+PostgreSQLDB:
+  User: "postgres"
+  Pass: "12345"
+  Host: "localhost"
+  Port: "5432"
+  Dbname: "ozonlinksdb"
+  SSLMode: "disable"
+  MaxConns: "100"
+RedisDB:
+  Addr: "localhost:6379"
+  Pass: "12345"
+  DBNum:  "0"

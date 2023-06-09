@@ -1,12 +1,6 @@
 
-app-on-redis-build:
-	docker compose build --build-arg STORAGE=Redis
+app-on-redis:
+	docker compose up app redis --no-deps --build
 
-app-on-postgres-build:
-	docker compose build --build-arg STORAGE=PostgreSQL --build-arg MIGRATION=OnStart
-
-app-on-redis-start:
-	docker-compose up -d app redis
-
-app-on-postgres-start:
-	docker-compose up -d app postgres
+app-on-postgres:
+	docker compose up app postgres --no-deps --build
