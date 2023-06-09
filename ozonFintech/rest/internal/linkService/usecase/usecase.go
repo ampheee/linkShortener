@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"github.com/rs/zerolog"
-	"math"
 	"ozonFintech/config"
 	"ozonFintech/internal/linkService"
 	"ozonFintech/internal/linkService/repository/postgreRepo"
@@ -33,7 +32,7 @@ func (l LinkUseCase) SaveOriginalLink(ctx context.Context, link string) (string,
 	if link == "" {
 		return "", errors.New("EmptyLink")
 	}
-	abbreviatedLink := utilities.EncodeBase63(int64(math.Abs(float64(utilities.HashLink(link)))))
+	abbreviatedLink := utilities.EncodeBase63(utilities.HashLink(link))
 	l.Logger.Info().Msg(abbreviatedLink)
 	if err := l.Repo.InsertLink(ctx, abbreviatedLink, link); err != nil {
 		return "", err

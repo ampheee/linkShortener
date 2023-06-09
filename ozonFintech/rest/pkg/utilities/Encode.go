@@ -1,17 +1,18 @@
 package utilities
 
 import (
-	"crypto/md5"
+	"crypto/sha256"
 	"encoding/hex"
 	"math/big"
+	"strings"
 )
 
 const alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_"
 const length = 10
 
-func EncodeBase63(n int64) string {
+func EncodeBase63(n uint64) string {
 	if n == 0 {
-		return string(alphabet[0])
+		return strings.Repeat(string(alphabet[0]), length)
 	}
 	result := make([]byte, 0, length)
 	for n > 0 && len(result) < length {
@@ -31,12 +32,12 @@ func reverse(s []byte) {
 	}
 }
 
-func HashLink(link string) int64 {
-	h := md5.New()
+func HashLink(link string) uint64 {
+	//log := logger.GetLogger()
+	h := sha256.New()
 	bi := big.NewInt(0)
 	h.Write([]byte(link))
 	hashBytes := h.Sum(nil)
-	hashString := hex.EncodeToString(hashBytes)
-	bi.SetString(hashString, 16)
-	return bi.Int64()
+	check := bi.SetBytes([]byte(hex.EncodeToString(hashBytes)))
+	return check.Uint64()
 }
