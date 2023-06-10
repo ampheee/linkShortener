@@ -1,0 +1,39 @@
+version: "3"
+services:
+  app:
+    image: grpc-go
+    build:
+      dockerfile: Dockerfile
+      context: .
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8080:8080"
+      - "9000:9000"
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345"
+      POSTGRES_HOST: "postgres"
+      POSTGRES_PORT: "5432"
+      POSTGRES_DB: "ozonlinksdb"
+      POSTGRES_SSL_MODE: "disable"
+      REDIS_ADDR: "redis:6379"
+      REDIS_PASS: ""
+      REDIS_DB_NUM: "0"
+      GRPCPort: ":9000"
+      HTTPPort: ":8080"
+    restart: unless-stopped
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "12345"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  redis:
+    image: redis
+    environment:
+      REDIS_ADDR: "localhost:6379"
+
+

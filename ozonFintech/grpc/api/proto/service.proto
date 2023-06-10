@@ -6,30 +6,30 @@ import "google/api/annotations.proto";
 
 option go_package="./grpc_domain";
 
-service Shortener {
+service LinkService {
   rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {
     option (google.api.http) = {
-      post: "/get"
-      body: "*"
+      post: "/create/{origLink}"
+
     };
   }
   rpc Get(GetLinkRequest) returns (GetLinkResponse) {
     option (google.api.http) = {
-      get: "/get/{link}"
+      get: "/rus.tam/{abbreviatedLink}"
     };
   }
 }
 
 message CreateLinkRequest {
-  string link = 1;
+  string origLink = 1;
 }
 
 message CreateLinkResponse {
-  string shortLink = 1;
+  string abbreviatedLink = 1;
 }
 
 message GetLinkRequest {
-  string link = 1;
+  string abbreviatedLink = 1;
 }
 
 message GetLinkResponse {
