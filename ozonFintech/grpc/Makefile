@@ -1,8 +1,12 @@
+.PHONY: app-on-postgres app-on-redis grpc_build
+
 grpc_build:
 	 protoc --proto_path=api/proto/ --go_out=. --go-grpc_out=. --grpc-gateway_out=. api/proto/*proto
 
 app-on-redis:
-	docker compose up app redis --no-deps --build
+	docker compose stop
+	docker compose up app_redis redis --build
 
 app-on-postgres:
-	docker compose up app postgres --no-deps --build
+	docker compose stop
+	docker compose up app_postgres postgres --build

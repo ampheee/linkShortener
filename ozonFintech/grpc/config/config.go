@@ -77,10 +77,8 @@ func ParseConfigFromEnv() Config {
 			Pass:  os.Getenv("REDIS_PASS"),
 			DBNum: os.Getenv("REDIS_DB_NUM"),
 		},
-		StorageType: os.Getenv("STORAGE"),
-		Migration:   os.Getenv("MIGRATION"),
-		GRPCPort:    os.Getenv("GRPCPort"),
-		HTTPPort:    os.Getenv("HTTPPort"),
+		GRPCPort: os.Getenv("GRPCPORT"),
+		HTTPPort: os.Getenv("HTTPPORT"),
 	}
 	log.Info().Msg("Config parsed successfully.")
 	return c

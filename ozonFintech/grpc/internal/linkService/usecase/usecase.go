@@ -61,7 +61,6 @@ func NewLinkService(ctx context.Context, c config.Config) (grpc_domain.LinkServi
 			logg.Warn().Err(err).Msg("unable to get postgresql pool while call newLinkService.")
 			return nil, err
 		}
-		logg.Info().Msg("")
 		postgresql.InitMigration(c)
 		repo = postgreRepo.NewPostgreRep(pool)
 	}

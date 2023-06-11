@@ -6,4 +6,4 @@ EXPOSE 8080
 WORKDIR ./app
 RUN go build app.go
 
-ENTRYPOINT ["./app", "-storage=PostgreSQL", "-migration=OnStart"]
+ENTRYPOINT ["./app"]

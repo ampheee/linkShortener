@@ -1,7 +1,7 @@
 PostgreSQLDB:
   User: "postgres"
   Pass: "12345"
-  Host: "localhost  "
+  Host: "localhost"
   Port: "5432"
   Dbname: "ozonlinksdb"
   SSLMode: "disable"
