@@ -1,5 +1,5 @@
 create database ozonlinksdb;
-GRANT ALL PRIVILEGES ON DATABASE ozonlinksdb TO postgres;
+grant all privileges on database ozonlinksdb to postgres;
 \c ozonlinksdb;
 create table if not exists links(
     abbreviated varchar(10) primary key,

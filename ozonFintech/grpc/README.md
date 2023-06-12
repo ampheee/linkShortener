@@ -8,9 +8,8 @@
 
 ## Старт:
     make app-on-redis # старт с Redis в качестве хранилища.
-    # Предварительно выставить значения флагов в dockerfile для запуска с PostgreSQL.
-    make app-on-postgresql # старт с PostgreSQL в качестве хранилища.
-    docker-compose run app -storage=PostgreSQL -migration=OnStart # старт командой run.
+    make app-on-postgres # старт с PostgreSQL в качестве хранилища.
+    docker-compose run app -storage=PostgreSQL/Redis # старт командой run.
 
 ## Алгоритм шифрования и почему он работает.
  <b>Основная идея разработанного алгоритма заключается именно в том, чтобы получать только один и единственный 
@@ -26,7 +25,11 @@
 ### <i> С помощью CLI </i>: 
  
 
+
 ### <i> C помощью Postman/Insomnia/etc.. </i>:
 
+![screenPost]
+
+![sceenGet](
 
 ####  P.S.: Надеюсь на обратную связь. Положительную или отрицательную, главное дайте понять, что можно улучшить :)

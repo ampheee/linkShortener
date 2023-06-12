@@ -1,6 +1,8 @@
 
 app-on-redis:
-	docker compose up app redis --no-deps --build
+	docker compose stop
+	docker compose up app_redis_rest redis  --build
 
 app-on-postgres:
-	docker compose up app postgres --no-deps --build
+	docker compose stop
+	docker compose up app_postgres_rest postgres --build

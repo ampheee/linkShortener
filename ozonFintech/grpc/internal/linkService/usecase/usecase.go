@@ -25,7 +25,11 @@ type LinkUseCase struct {
 }
 
 func (l LinkUseCase) Get(ctx context.Context, r *grpc_domain.GetLinkRequest) (*grpc_domain.GetLinkResponse, error) {
-	l.Logger.Info().Msg(r.String())
+	l.Logger.Info().Msgf("%d %s", r.String(), len(r.String()))
+	if len(r.String()) != 10 {
+		return &grpc_domain.GetLinkResponse{},
+			status.Error(http.StatusBadRequest, "Bad request.")
+	}
 	originalLink, err := l.Repo.SelectLink(ctx, r.AbbreviatedLink)
 	if err != nil {
 		l.Logger.Warn().Err(err).Msg("unable to get link by abbreviated.")

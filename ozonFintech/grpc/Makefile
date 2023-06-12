@@ -9,4 +9,8 @@ app-on-redis:
 
 app-on-postgres:
 	docker compose stop
-	docker compose up app_postgres postgres --build
+	docker compose up app_postgres postgres --build --renew-anon-volumes
+
+test:
+	go test -v ./internal/linkService/mockRepo/*.go
+	go test -v ./pkg/utilities/Encode_test.go ./pkg/utilities/Encode.go

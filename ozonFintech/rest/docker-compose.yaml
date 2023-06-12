@@ -1,35 +1,52 @@
 version: "3.9"
 services:
-  app:
+  app_redis_rest:
+    container_name: app-on-redis-rest
     build:
       dockerfile: Dockerfile
       context: .
+    command: -storage=Redis
     depends_on:
-      - postgres
       - redis
     ports:
       - "8080:8080"
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "12345"
-      POSTGRES_HOST: "postgres"
-      POSTGRES_PORT: "5432"
-      POSTGRES_DB: "ozonlinksdb"
-      POSTGRES_SSL_MODE: "disable"
-      REDIS_ADDR: "redis:6379"
-      REDIS_PASS: ""
-      REDIS_DB_NUM: "0"
-    restart: always
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  app_postgres_rest:
+    container_name: app-on-postgres-rest
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: -storage=PostgreSQL
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    restart: unless-stopped
+
   postgres:
     image: postgres
-    environment:
-      POSTGRES_USER: "postgres"
-      POSTGRES_PASSWORD: "12345"
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+
   redis:
     image: redis
-    environment:
-      REDIS_ADDR: "localhost:6379"
-
+    env_file:
+      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
 

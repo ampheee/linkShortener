@@ -46,6 +46,7 @@ services:
       interval: 1s
       timeout: 3s
       retries: 5
+    restart: unless-stopped
 
   redis:
     container_name: redis
