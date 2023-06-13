@@ -35,11 +35,10 @@ services:
   postgres:
     container_name: postgres
     image: postgres
-    profiles:
-      - with_postgres
     env_file:
       - .env
     volumes:
+      - ./data/postgres/:/docker-entrypoint-initdb.d
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
@@ -50,8 +49,6 @@ services:
 
   redis:
     container_name: redis
-    profiles:
-      - with_redis
     image: redis
     env_file:
       - .env

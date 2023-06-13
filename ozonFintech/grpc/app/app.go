@@ -2,18 +2,18 @@ package main
 
 import (
 	"grpcService/config"
-	"grpcService/internal/client"
+	"grpcService/internal/server"
 	"grpcService/pkg/utilities"
 )
 
 func main() {
 	Config := config.ParseConfigFromEnv()
-	utilities.ParseFlagsFromCLI(&Config)
 	//Config := config.ParseConfigFromYaml(config.LoadConfigFromYaml())
-	Client, err := client.NewClient(Config)
+	utilities.ParseFlagsFromCLI(&Config)
+	Server, err := server.NewServer(Config)
 	if err != nil {
 		return
 	}
-	Client.Run()
+	Server.Run()
 
 }

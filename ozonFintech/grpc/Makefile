@@ -8,8 +8,9 @@ app-on-redis:
 	docker compose up app_redis redis --build
 
 app-on-postgres:
+	rm -rf ./data/postgres/*
 	docker compose stop
-	docker compose up app_postgres postgres --build --renew-anon-volumes
+	docker compose up app_postgres postgres --build
 
 test:
 	go test -v ./internal/linkService/mockRepo/*.go

@@ -2,9 +2,11 @@
 
 Тестовое задание Ozon-fintech. GRPC-реализация. 
 Сервис запускается с помощью Makefile и docker-compose.
+Способ хранения определяется Makefile, либо вручную. Выбор - PostgreSQL/Redis
 
 <br>[Старт.](#старт)
 <br>[Алгоритм шифрования и почему он работает.](#алгоритм-шифрования-и-почему-он-работает)
+<br>[Проверка решения.](#проверка-решения)
 
 ## Старт:
     make app-on-redis # старт с Redis в качестве хранилища.
@@ -22,14 +24,24 @@
 
 ## Проверка решения:
 
-### <i> С помощью CLI </i>: 
- 
+  Все эндпоинты находятся на `localhost:8080`
+  <br> Эндпоинты данной реализации:
+  <br> `/create` с передачей JSON.
+  <br> `/{abbreviatedLink}` с передачей сокращенной ссылки формата `rus.tam/HgJ46nyw8E`
 
+
+### <i> С помощью CLI </i>: 
+
+![screenPostCurl](images/postCurl.png)
+<br>`- Запрос POST командой curl`
+
+![screenGetCurl](images/getCurl.png)
+<br>`- Запрос GET командой`
 
 ### <i> C помощью Postman/Insomnia/etc.. </i>:
 
-![screenPost]
+![screenPostPostman](images/postPostman.png)
+<br>`- Запрос POST c Postman`
 
-![sceenGet](
-
-####  P.S.: Надеюсь на обратную связь. Положительную или отрицательную, главное дайте понять, что можно улучшить :)
+![sceenGetPostman](images/getPostman.png)
+<br>`- Запрос GET c Postman`

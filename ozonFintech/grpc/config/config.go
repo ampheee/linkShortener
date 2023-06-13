@@ -66,7 +66,7 @@ func ParseConfigFromEnv() Config {
 			Pass:    os.Getenv("POSTGRES_PASSWORD"),
 			Host:    os.Getenv("POSTGRES_HOST"),
 			Port:    os.Getenv("POSTGRES_PORT"),
-			Dbname:  os.Getenv("POSTGRES_DB_NAME"),
+			Dbname:  os.Getenv("POSTGRES_DB"),
 			SSLMode: os.Getenv("POSTGRES_SSL_MODE"),
 		}, RedisDB: struct {
 			Addr  string

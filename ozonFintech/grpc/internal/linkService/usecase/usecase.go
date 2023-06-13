@@ -25,8 +25,7 @@ type LinkUseCase struct {
 }
 
 func (l LinkUseCase) Get(ctx context.Context, r *grpc_domain.GetLinkRequest) (*grpc_domain.GetLinkResponse, error) {
-	l.Logger.Info().Msgf("%d %s", r.String(), len(r.String()))
-	if len(r.String()) != 10 {
+	if len(r.AbbreviatedLink) != 10 {
 		return &grpc_domain.GetLinkResponse{},
 			status.Error(http.StatusBadRequest, "Bad request.")
 	}
@@ -41,6 +40,7 @@ func (l LinkUseCase) Get(ctx context.Context, r *grpc_domain.GetLinkRequest) (*g
 				status.Error(http.StatusInternalServerError, "InternalServiceError")
 		}
 	}
+	l.Logger.Info().Msg("origLink returned.")
 	return &grpc_domain.GetLinkResponse{OrigLink: originalLink},
 		grpc.SendHeader(ctx, metadata.New(map[string]string{"status": "200"}))
 }
@@ -48,10 +48,9 @@ func (l LinkUseCase) Get(ctx context.Context, r *grpc_domain.GetLinkRequest) (*g
 func (l LinkUseCase) Create(ctx context.Context, r *grpc_domain.CreateLinkRequest) (*grpc_domain.CreateLinkResponse, error) {
 	if r.OrigLink == "" {
 		return &grpc_domain.CreateLinkResponse{},
-			status.Error(http.StatusBadRequest, "EmptyLink")
+			status.Error(http.StatusBadRequest, "BadRequest")
 	}
 	abbreviatedLink := utilities.EncodeBase63(utilities.HashLink(r.OrigLink))
-	l.Logger.Info().Msg(abbreviatedLink)
 	if err := l.Repo.InsertLink(ctx, abbreviatedLink, r.OrigLink); err != nil {
 		return &grpc_domain.CreateLinkResponse{},
 			status.Error(http.StatusInternalServerError, "InternalServiceError")

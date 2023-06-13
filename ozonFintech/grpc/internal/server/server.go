@@ -1,4 +1,4 @@
-package client
+package server
 
 import (
 	"context"
@@ -24,7 +24,7 @@ type AppContext struct {
 	Config config.Config
 }
 
-func NewClient(c config.Config) (*AppContext, error) {
+func NewServer(c config.Config) (*AppContext, error) {
 	log := logger.GetLogger()
 	lService, err := usecase.NewLinkService(context.Background(), c)
 	if err != nil {

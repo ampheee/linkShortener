@@ -9,8 +9,8 @@ option go_package="./grpc_domain";
 service LinkService {
   rpc Create(CreateLinkRequest) returns (CreateLinkResponse) {
     option (google.api.http) = {
-      post: "/create/{origLink}"
-
+      post: "/create"
+      body: "*"
     };
   }
   rpc Get(GetLinkRequest) returns (GetLinkResponse) {
