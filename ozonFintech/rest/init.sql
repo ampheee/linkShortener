@@ -1,2 +1,0 @@
-CREATE DATABASE ozonlinksdb;
-GRANT ALL PRIVILEGES ON DATABASE ozonlinksdb TO postgres;
